@@ -40,12 +40,4 @@ describe Particle do
     end
   end
 
-  context 'best attribute' do
-    before(:each) do
-      @particle = Particle.new
-    end
-    it 'should have a best attribute' do
-      @particle.best.should be_instance_of Best
-    end
-  end
 end
