@@ -4,9 +4,9 @@ class Particle
   @@max = 5.0
   @@n_dimensions = 2
 
-  attr_accessor :position
+  attr_accessor :position, :best
   def initialize
-    self.position = self.class.random_position(2)
+    self.position = self.class.random_position(self.class.n_dimensions)
   end
 
   def self.random_position(n_dimensions)

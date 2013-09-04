@@ -35,5 +35,17 @@ describe Particle do
     it 'should have a position' do
       @particle.position.should be_instance_of Array
     end
+    it 'should be able to change it position' do
+      @particle.position = [1,0,0]
+    end
+  end
+
+  context 'best attribute' do
+    before(:each) do
+      @particle = Particle.new
+    end
+    it 'should have a best attribute' do
+      @particle.best.should be_instance_of Best
+    end
   end
 end
