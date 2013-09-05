@@ -7,15 +7,14 @@ class PSO
   end
 
   def initialize_particles(n_particles,n_dimensions)
-    set_particles_number_of_dimensions(n_dimensions)
-    @particles = create_particles(n_particles)
+    @particles = create_particles(n_particles, n_dimensions)
     evaluate_particles
   end
 
-  def create_particles(n_particles)
+  def create_particles(n_particles, n_dimensions)
     particles = []
     n_particles.times do 
-      particles << Particle.new
+      particles << Particle.new(n_dimensions)
     end
     particles
   end
@@ -26,10 +25,6 @@ class PSO
       particle.best = best if particle.best.nil? or best.value >= particle.best.value
       @g_best = best if @_best.nil? or best.value >= particle.best.value
     end
-  end
-
-  def set_particles_number_of_dimensions(n_dimensions)
-    Particle.n_dimensions = n_dimensions
   end
   
 end

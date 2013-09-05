@@ -31,12 +31,12 @@ describe PSO do
       @pso.particles.should be_instance_of Array
     end
     it 'should create n particles' do
-      particles = @pso.create_particles(@n_particles)
+      particles = @pso.create_particles(@n_particles, @n_dimensions)
       particles.should be_instance_of Array
       particles.size.should eq(@n_particles)
     end
     it 'should have set the right number of dimensions to every particles' do
-      particles = @pso.create_particles(@n_particles)
+      particles = @pso.create_particles(@n_particles, @n_dimensions)
       particles.each do |particle|
         particle.position.size.should eq(@n_dimensions)
       end
