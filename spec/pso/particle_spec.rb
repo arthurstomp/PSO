@@ -40,4 +40,14 @@ describe Particle do
     end
   end
 
+  context 'velocity attribute' do
+    before(:each) do 
+      @particle = Particle.new
+    end
+    it 'should have a random velocity after initialization' do
+      @particle.velocity.should_not be_nil
+      @particle.velocity.size.should eq(Particle.n_dimensions)
+    end
+  end
+
 end

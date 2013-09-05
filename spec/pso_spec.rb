@@ -4,7 +4,13 @@ describe PSO do
   it 'should initialize' do
     n_particles = 100
     n_dimensions = 2
-    fitness = Proc.new {}
+    fitness = Proc.new {|position|
+      sum = 0
+      position.each do |position_i|
+        sum += position_i
+      end
+      sum
+    }
     expect{PSO.new(n_particles, n_dimensions, fitness)}.not_to raise_error
   end
 
@@ -12,7 +18,13 @@ describe PSO do
     before(:each) do
       @n_particles = 100
       @n_dimensions = 2
-      @fitness = Proc.new {}
+      @fitness = Proc.new {|position|
+        sum = 0
+        position.each do |position_i|
+          sum += position_i
+        end
+        sum
+      }
       @pso = PSO.new(@n_particles, @n_dimensions, @fitness)
     end
     it 'should have an array of particles' do
@@ -66,6 +78,25 @@ describe PSO do
         particle.best.value.should eq(checksum)
         particle.best.position.should eq(particle.position)
       end
+    end
+  end
+
+  context 'Global best' do
+    before(:each) do
+      @n_particles = 10
+      @n_dimensions = 2
+      @fitness = Proc.new {|position|
+        sum = 0
+        position.each do |position_i|
+          sum += position_i
+        end
+        sum
+      }
+      @pso = PSO.new(@n_particles, @n_dimensions, @fitness)
+    end
+    it 'should have a global best' do
+      @pso.g_best.should_not be_nil
+      @pso.g_best.should be_instance_of Best
     end
   end
 end
