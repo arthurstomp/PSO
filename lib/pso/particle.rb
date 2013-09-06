@@ -27,11 +27,27 @@ class Particle
   def random_velocity
     random_velocity = Array.new(self.n_dimensions)
     @n_dimensions.times do |i|
-      velocity_i = rand(@n_dimensions)
+      velocity_i = rand(0..@@max_velocity*100)/100
       velocity_i *= rand > 0.5 ? 1 : -1
       random_velocity[i-1] = velocity_i
     end
     random_velocity
+  end
+
+  def self.min_velocity
+    @@min_velocity
+  end
+
+  def self.max_velocity
+    @@max_velocity
+  end
+
+  def self.max_position
+    @@max_position
+  end
+
+  def self.min_position
+    @@min_position
   end
   
 end

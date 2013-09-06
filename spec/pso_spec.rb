@@ -64,9 +64,13 @@ describe PSO do
       @pso = PSO.new(@n_particles, @n_dimensions, @fitness)
     end
     it 'should set the best of every particle when create them' do
+      g_best = nil
       @pso.particles.each do |particle|
         particle.best.should be_instance_of Best
+        g_best = particle.best.clone if g_best.nil? or g_best.value <= particle.best.value
       end
+      @pso.g_best.value.should eq(g_best.value)
+      @pso.g_best.position.should eq(g_best.position)
     end
 
     it 'should sum the value of the positions and set it as the best value' do
@@ -81,7 +85,22 @@ describe PSO do
     end
   end
 
-  context 'Global best' do
+  it 'should have a global best' do
+    @n_particles = 10
+    @n_dimensions = 2
+    @fitness = Proc.new {|position|
+      sum = 0
+      position.each do |position_i|
+        sum += position_i
+      end
+      sum
+    }
+    @pso = PSO.new(@n_particles, @n_dimensions, @fitness)
+    @pso.g_best.should_not be_nil
+    @pso.g_best.should be_instance_of Best
+  end
+
+  context 'particle exploration' do
     before(:each) do
       @n_particles = 10
       @n_dimensions = 2
@@ -94,9 +113,27 @@ describe PSO do
       }
       @pso = PSO.new(@n_particles, @n_dimensions, @fitness)
     end
-    it 'should have a global best' do
-      @pso.g_best.should_not be_nil
-      @pso.g_best.should be_instance_of Best
+    it 'exploration should change the velocity of a particle' do
+      particle1_former_velocity = @pso.particles[0].velocity.clone
+      @pso.change_particle_velocity(@pso.particles[0])
+      @pso.particles[0].velocity.should_not eq(particle1_former_velocity)
+      
+    end
+    it 'particle exploration should change particles position' do
+      particles_former_positions = []
+      @pso.particles.each do |particle|
+        particles_former_positions << particle.position.clone
+      end
+      @pso.explore!
+      @pso.particles.each do |particle|
+        particle_index = @pso.particles.index(particle)
+        particle.position.should_not eq(particles_former_positions[particle_index]) if particle.position != @pso.g_best.position
+      end
+    end
+    it 'exploration should aim for the best position' do
+      former_g_best = @pso.g_best.clone
+      @pso.explore!
+      @pso.g_best.value.should >= former_g_best.value
     end
   end
 end
