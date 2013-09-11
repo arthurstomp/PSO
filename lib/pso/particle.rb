@@ -2,8 +2,8 @@ require File.join(File.dirname(__FILE__),'best')
 class Particle 
   @@min_position = -5.0
   @@max_position = 5.0
-  @@min_velocity = -0.05
-  @@max_velocity = 0.05
+  @@max_velocity = 1.0
+  @@min_velocity = -@@max_velocity
 
   attr_reader :n_dimensions
   attr_accessor :position, :best, :velocity
@@ -17,8 +17,7 @@ class Particle
   def random_position
     random_position = Array.new(self.n_dimensions)
     n_dimensions.times do |i|
-      position_i = rand(@@max_position)
-      position_i *= rand > 0.5 ? 1 : -1
+      position_i = (@@min_position + (rand * (@@max_position - @@min_position)))
       random_position[i-1] = position_i
     end
     random_position
@@ -38,16 +37,32 @@ class Particle
     @@min_velocity
   end
 
+  def self.min_velocity=(new_min_velocity)
+    @@min_velocity = new_min_velocity
+  end
+
   def self.max_velocity
     @@max_velocity
+  end
+
+  def self.max_velocity=(new_max_velocity)
+    @@max_velocity = new_max_velocity
+  end
+
+  def self.min_position
+    @@min_position
+  end
+
+  def self.min_position=(new_min_position)
+    @@min_position = new_min_position
   end
 
   def self.max_position
     @@max_position
   end
 
-  def self.min_position
-    @@min_position
+  def self.max_position=(new_max_position)
+    @@max_position = new_max_position
   end
   
 end

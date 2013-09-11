@@ -27,8 +27,8 @@ class PSO
   def evaluate_particles
     self.particles.each do |particle|
       best = Best.new(self.fitness.call(particle.position),particle.position)
-      particle.best = best if particle.best.nil? or best.value >= particle.best.value
-      @g_best = best if self.g_best.nil? or best.value >= self.g_best.value
+      particle.best = best if particle.best.nil? or best.value < particle.best.value
+      @g_best = best if self.g_best.nil? or best.value < self.g_best.value
     end
   end
 
@@ -42,10 +42,12 @@ class PSO
   def change_particle_position(particle)
     particle.position.map! do |position_i|
       dimension_index = particle.position.index(position_i)
-      if position_i + particle.velocity[dimension_index] < Particle.min_position
+      if position_i + particle.velocity[dimension_index] <= Particle.min_position
         position_i = Particle.min_position
+        particle.velocity[dimension_index] *= -1
       elsif position_i + particle.velocity[dimension_index] > Particle.max_position
         position_i = Particle.max_position
+        particle.velocity[dimension_index] *= -1
       else
         position_i += particle.velocity[dimension_index]
       end
@@ -62,19 +64,21 @@ class PSO
     particle.velocity.map! do |velocity_i|
       dimension_index = particle.velocity.index(velocity_i)
       new_velocity = velocity_i
-      new_velocity += random_factor * (particle.best.position[dimension_index] - particle.position[dimension_index]) +
-        random_factor * (self.g_best.position[dimension_index] - particle.position[dimension_index])
-      if new_velocity < Particle.min_velocity
-        new_velocity = Particle.min_velocity
-      elsif new_velocity > Particle.max_velocity
+      v1 = random_factor * (particle.best.position[dimension_index] - particle.position[dimension_index])
+      v2 = random_factor * (self.g_best.position[dimension_index] - particle.position[dimension_index])
+      if new_velocity + v1 + v2 > Particle.max_velocity
         new_velocity = Particle.max_velocity
+      elsif new_velocity + v1 + v2 > Particle.min_velocity 
+        new_velocity = Particle.min_velocity
+      else
+        new_velocity += v1 + v2
       end
       velocity_i = new_velocity
     end
   end
 
   def random_factor
-    rand(0..1000)*1000.0
+    rand
   end
   
 end

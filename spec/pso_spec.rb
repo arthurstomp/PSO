@@ -55,9 +55,9 @@ describe PSO do
       @n_particles = 10
       @n_dimensions = 2
       @fitness = Proc.new {|position|
-        sum = 0
+        sum = Float::INFINITY
         position.each do |position_i|
-          sum += position_i
+          sum -= position_i
         end
         sum
       }
@@ -75,9 +75,9 @@ describe PSO do
 
     it 'should sum the value of the positions and set it as the best value' do
       @pso.particles.each do |particle|
-        checksum = 0
+        checksum = Float::INFINITY
         particle.position.each do |position_i|
-          checksum += position_i
+          checksum -= position_i
         end
         particle.best.value.should eq(checksum)
         particle.best.position.should eq(particle.position)
@@ -133,7 +133,7 @@ describe PSO do
     it 'exploration should aim for the best position' do
       former_g_best = @pso.g_best.clone
       @pso.explore!
-      @pso.g_best.value.should >= former_g_best.value
+      @pso.g_best.value.should <= former_g_best.value
     end
   end
 end
