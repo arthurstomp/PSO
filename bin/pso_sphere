@@ -9,17 +9,16 @@ sphere_proc = Proc.new do |position|
   next sphere_return
 end
 
-@dimensions = 1000
+@dimensions = 20
 
-Particle.min_position = -5
-Particle.max_position = 5
+Particle.min_position = -20
+Particle.max_position = 20
 
-@pso = PSO.new(10,@dimensions,sphere_proc)
-1000.times do
-  @pso.explore!
-end
-puts @pso.g_best.value
-1000.times do
+Particle.max_velocity = 5
+Particle.min_velocity = -5
+
+@pso = PSO.new(20,@dimensions,sphere_proc)
+2000.times do
   @pso.explore!
 end
 puts @pso.g_best.value

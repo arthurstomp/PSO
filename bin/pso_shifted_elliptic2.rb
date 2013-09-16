@@ -16,15 +16,18 @@ Particle.min_position = -Particle.max_position
 Particle.max_velocity = 50
 Particle.min_velocity = -Particle.max_velocity
 
-@dimensions = 4
+@dimensions = 7
+@n_iterations = 300
 
-puts "Dimension = #{@dimensions}"
+puts "Number of Dimensions = #{@dimensions}"
+puts "Max velocity = #{Particle.max_velocity} Min velocity = #{Particle.min_velocity}"
+puts "Number of Iterations = #{@n_iterations}"
 
-@pso = PSO.new(50,@dimensions,@fitness)
-3000000.times do
+@pso = PSO.new(100,@dimensions,@fitness)
+@n_iterations.times do
   @pso.explore!
 end
 
-puts @pso.g_best.value
-puts @pso.g_best.position.to_s
+puts "Global optimum = #{@pso.g_best.value}"
+puts "Global optimum position = #{@pso.g_best.position.to_s}"
 
