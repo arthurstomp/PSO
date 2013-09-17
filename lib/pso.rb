@@ -26,9 +26,13 @@ class PSO
 
   def evaluate_particles
     self.particles.each do |particle|
-      best = Best.new(self.fitness.call(particle.position),particle.position)
-      particle.best = best if particle.best.nil? or best.value < particle.best.value
-      @g_best = best if self.g_best.nil? or best.value < self.g_best.value
+      fitness_value = self.fitness.call(particle.position)
+      best = Best.new(fitness_value,particle.position)
+      particle.best = best if particle.best.nil? or best.value <= particle.best.value
+      @g_best = best if self.g_best.nil? or best.value <= self.g_best.value
+      puts "fitness = #{fitness_value} position = #{particle.position.to_s}"
+      puts "g best = #{self.g_best.value} g best position = #{self.g_best.position.to_s}"
+      gets
     end
   end
 
@@ -41,20 +45,18 @@ class PSO
 
   def change_particle_position(particle)
     particle.position.each_with_index do |position_i, dimension_index|
-      particle.position[dimension_index] = new_position(position_i, velocity_i)
+      particle.position[dimension_index] = new_position(position_i, particle.velocity[dimension_index])
     end
   end
 
   def new_position(position_i, velocity_i)
     new_position = position_i
-    if position_i + velocity_i <= Particle.min_position
+    if position_i + velocity_i < Particle.min_position
       new_position = Particle.min_position
-      particle.velocity[dimension_index] *= -1
-    elsif position_i + particle.velocity[dimension_index] > Particle.max_position
+    elsif position_i + velocity_i > Particle.max_position
       new_position = Particle.max_position
-      particle.velocity[dimension_index] *= -1
     else
-      new_position += particle.velocity[dimension_index]
+      new_position += velocity_i
     end
     new_position
   end
@@ -79,9 +81,9 @@ class PSO
     phi = random_factor
     v1 = phi[0] * (p_best_position_i - p_position_i)
     v2 = phi[1] * (g_best_position_i - p_position_i)
-    if velocity_i + v1 + v2 > Particle.max_velocity
+    if former_velocity_i + v1 + v2 > Particle.max_velocity
       new_velocity = Particle.max_velocity
-    elsif velocity_i + v1 + v2 > Particle.min_velocity 
+    elsif former_velocity_i + v1 + v2 > Particle.min_velocity 
       new_velocity = Particle.min_velocity
     else
       new_velocity = former_velocity_i + v1 + v2
@@ -90,12 +92,12 @@ class PSO
   end
 
   def random_factor
-    r1 = rand(4)
-    r2 = rand(4)
+    r1 = rand(4.1)
+    r2 = rand(4.1)
     begin
-      r1 = rand(4)
-      r2 = rand(4)
-    end while r1 + r2 <= 4.0
+      r1 = rand(4.1)
+      r2 = rand(4.1)
+    end while r1 + r2 <= 4.1
     [r1,r2]
   end
   
