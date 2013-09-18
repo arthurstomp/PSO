@@ -10,13 +10,14 @@ sphere_proc = Proc.new do |position|
   next sphere_return
 end
 
-@dimensions = 30
+@dimensions = 3
 
 Particle.min_position = -20
 Particle.max_position = 20
 
 @pso = PSO_Type1.new(20,@dimensions,sphere_proc)
-2000.times do
+100.times do
   @pso.explore!
 end
 puts @pso.g_best.value
+puts @pso.g_best.position.to_s
