@@ -5,14 +5,16 @@ class PSO_Type1 < PSO
     phis = random_factor
     phi1 = phis[0]
     phi2 = phis[1]
-    phi = 4.1
-    p = (phi1*p_position_i + phi2*g_best_position_i)/phi1 + phi2
+    phi = phi1 + phi2
+    p = (phi1*p_position_i + phi2*g_best_position_i)/phi
 
-    k = 1
-    aux = 2 - phi - Math.sqrt(phi**2 - 4*phi)
+    k = range(0.0, 3.6)
+    aux = 2 - phi - Math.sqrt((phi**2) - (4*phi))
     aux *= -1 if aux < 0
     big_x = (2*k) / aux
     
-    new_velocity = big_x*(former_velocity_i + phi*(p - p_position_i))
+    aux_velocity = former_velocity_i + phi*(p - p_position_i)
+
+    new_velocity = big_x*(aux_velocity)
   end
 end
