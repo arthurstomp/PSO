@@ -13,11 +13,8 @@ end
 
 @dimensions = 30
 
-Particle.min_position = -5.12
-Particle.max_position = 5.12
-
-Particle.max_velocity = 2.0
-Particle.min_velocity = -2.0
+PSO_Type1.min_position = -5.12
+PSO_Type1.max_position = 5.12
 
 best_of_test = nil
 

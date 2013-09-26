@@ -28,7 +28,7 @@ end
 
 @pso_sin.explore!
 plot_with_scilab('sin(x)',
-                 Particle.min_position,
-                 Particle.max_position,
+                 PSO.min_position,
+                 PSO.max_position,
                  [@pso_sin.g_best.position[0]],
                  [@pso_sin.g_best.value])
