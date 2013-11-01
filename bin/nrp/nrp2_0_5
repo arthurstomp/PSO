@@ -1,0 +1,32 @@
+#!/Users/Stomp/.rvm/rubies/ruby-2.0.0-p195/bin/ruby
+require File.join(File.dirname(__FILE__),'../../lib/setup')
+
+@max_v, @min_v = 4.0 , -4.0
+@n_particles = 200
+@n_iterations = 200
+
+@factor = 0.5
+
+@nrp = NRP.new :path => @nrp_test_path << 'nrp2.txt', :ratio => @factor
+
+average(20){
+  run_time = time {
+    PSO.max_velocity = @max_v
+    PSO.min_velocity = @min_v
+    @pso = PSO_Binary.new(@n_particles,@nrp.customers.size,@nrp.method(:fitness))
+
+    @n_iterations.times do 
+      @pso.explore!
+    end
+
+    puts "----------------------------------------------------------------"
+    puts " nrp2 factor #{@factor}"
+    puts " pso vmax = #{@max_v}"
+    puts " best = #{@pso.g_best.value}"
+  }
+  puts " run time = #{run_time}"
+  puts "----------------------------------------------------------------"
+
+  @pso.g_best.value
+}
+

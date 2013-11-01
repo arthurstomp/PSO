@@ -8,7 +8,7 @@ class PSO_Type1 < PSO
     phi = phi1 + phi2
     p = (phi1*p_position_i + phi2*g_best_position_i)/phi
 
-    k = range(0.0, 3.6)
+    k = range(0.0, 4.0)
     aux = 2 - phi - Math.sqrt((phi**2) - (4*phi))
     aux *= -1 if aux < 0
     big_x = (2*k) / aux

@@ -5,31 +5,27 @@ require File.join(File.dirname(__FILE__),'../lib/pso_type1')
 sphere_proc = Proc.new do |position|
   sphere_return = 0
   position.each do |position_i|
-    value = (position_i ** 2) - 10*Math.cos(2*Math::PI*position_i) + 10
-    sphere_return += value
+    sphere_return += position_i ** 2
   end
   next sphere_return
 end
 
 @dimensions = 30
 
-PSO.min_position = -5.12
-PSO.max_position = 5.12
-
-PSO.max_velocity = 2.0
-PSO.min_velocity = -2.0
+PSO_Type1.min_position = -20
+PSO_Type1.max_position = 20
 
 best_of_test = nil
 
 #20.times do 
 #end
 
-@pso = PSO.new(20,@dimensions,sphere_proc)
+@pso = PSO_Type1.new(20,@dimensions,sphere_proc)
 2000.times do
   @pso.explore!
 end
 if best_of_test.nil? or @pso.g_best.value < best_of_test.value
   best_of_test = @pso.g_best.clone
 end
-puts "g best value = #{best_of_test.value}"
-puts "g best position = #{best_of_test.position}"
+puts best_of_test.value
+puts "type1\""

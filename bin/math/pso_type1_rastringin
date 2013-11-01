@@ -29,4 +29,4 @@ if best_of_test.nil? or @pso.g_best.value < best_of_test.value
   best_of_test = @pso.g_best.clone
 end
 puts "g best value = #{best_of_test.value}"
-puts "g best position = #{best_of_test.position}"
+puts "type1\""
