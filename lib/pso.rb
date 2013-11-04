@@ -1,14 +1,18 @@
 require File.join(File.dirname(__FILE__), 'pso/particle')
+require 'mongoid'
 class PSO
-  @@min_position = -5.0
-  @@max_position = 5.0
-  @@max_velocity = 1.0
-  @@min_velocity = -@@max_velocity
-  attr_accessor :g_best
-  attr_reader :particles, :fitness 
-  def initialize(n_particles,n_dimensions,fitness)
-    @fitness = fitness
-    initialize_particles(n_particles,n_dimensions)
+  embeds_one = :g_best, :class => :best
+  #attr_accessor :g_best
+  embeds_many = :particles, :class => :particle
+  field :fitness
+  field :min_position, :type => Float, :default => -5.0
+  field :max_position, :type => Float, :default => 5.0
+  field :max_velocity, :type => Float, :default => 1.0
+  field :min_velocity, :type => Float, :default => -1.0
+  #attr_reader :particles, :fitness 
+  def initialize(attr = nil, options = nil)
+    super
+    intialize_particles(attr[:n_particles], attr[:n_dimensions], attr[:fitness])
   end
 
   def initialize_particles(n_particles,n_dimensions)
@@ -140,12 +144,12 @@ class PSO
     rand * (max-min) + min
   end
 
-  def self.min_velocity
-    @@min_velocity
+  def min_velocity
+    attr[:min_velocity]
   end
 
-  def self.min_velocity=(new_min_velocity)
-    @@min_velocity = new_min_velocity
+  def min_velocity=(new_min_velocity)
+    self.update_attribute(:min_velocity, new_min_velocity)
   end
 
   def self.max_velocity
