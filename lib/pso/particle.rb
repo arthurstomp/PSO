@@ -1,5 +1,4 @@
 require 'mongoid'
-#Mongoid.load!('/Users/Stomp/Development/Ruby/pso/lib/mongoid.yml', :development)
 require File.join(File.dirname(__FILE__),'best')
 class Particle 
   include Mongoid::Document
@@ -7,6 +6,7 @@ class Particle
   field :position, type:Array
   field :velocity, type:Array
   embeds_one :best
+  embedded_in :pso
 
   def n_dimensions
     self[:n_dimensions]
@@ -17,7 +17,7 @@ class Particle
   end
 
   def position=(new_position)
-    self.update_attribute(:position, new_position)
+    self[:position] = new_position
   end
 
   def velocity
@@ -25,7 +25,11 @@ class Particle
   end
 
   def velocity=(new_velocity)
-    self.update_attribute(:velocity, new_velocity)
+    self[:velocity] = new_velocity
   end
-
 end
+
+#Particle.delete_all
+#p = Particle.create!(:n_dimensions => 1, :velocity => [1,1], :position => [1,1])
+#p.create_best(:value => 1, :position => [1,1])
+#puts p.to_json
