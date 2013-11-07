@@ -1,5 +1,4 @@
 require File.join(File.dirname(__FILE__), 'pso/particle')
-#Mongoid.load!('/Users/Stomp/Development/Ruby/pso/lib/mongoid.yml', :development)
 require 'mongoid'
 class PSO
   include Mongoid::Document
@@ -9,10 +8,19 @@ class PSO
   field :max_position, :type => Float, :default => 5.0
   field :max_velocity, :type => Float, :default => 1.0
   field :min_velocity, :type => Float, :default => -1.0
+  field :n_particles, :type => Integer
+  field :n_dimensions, :type => Integer
+  field :name , :type => String
+  field :iteration, :type => Integer
   attr_accessor :fitness 
+
   def initialize(attrs = nil, options = nil)
     super
     self.fitness = options[:fitness]
+    self.max_velocity = attrs[:max_velocity] if attrs[:max_velocity]
+    self.min_velocity = attrs[:min_velocity] if attrs[:min_velocity]
+    self.max_position = attrs[:max_position] if attrs[:max_position]
+    self.min_position = attrs[:min_position] if attrs[:min_position]
     initialize_particles(attrs[:n_particles], attrs[:n_dimensions])
   end
 
@@ -49,6 +57,7 @@ class PSO
   def explore!
     update_particles_position
     evaluate_particles
+    self.update_attribute(:iteration , self[:iteration] + 1)
   end
 
   def evaluate_particles
@@ -75,6 +84,7 @@ class PSO
       end
       particle.position[dimension_index] = new_position
     end
+    self.save
   end
 
   def new_position(position_i, velocity_i)
@@ -102,6 +112,7 @@ class PSO
       g_best_position_i = self.g_best.position[dimension_index]
       particle.velocity[dimension_index] = new_velocity(velocity_i, p_best_position_i, p_position_i, g_best_position_i)
     end
+    self.save
   end
 
   def new_velocity(former_velocity_i, p_best_position_i, p_position_i, g_best_position_i)

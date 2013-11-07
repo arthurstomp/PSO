@@ -1,6 +1,6 @@
-development:
+test:
   sessions:
     default:
-      database: mongoid 
+      database: nrp 
       hosts: 
         - localhost:27017
