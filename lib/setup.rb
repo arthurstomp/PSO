@@ -25,9 +25,14 @@ end
 
 def average(n_runs,result_file)
   bests = Array.new(0)
+
   n_runs.times do |i|
     bests[i] = yield
   end
+
+  puts "best = #{bests.max}"
+  puts "bests = #{bests.to_s}"
+
   result_file.puts "best = #{bests.max}"
   result_file.puts "bests = #{bests.to_s}"
 end
