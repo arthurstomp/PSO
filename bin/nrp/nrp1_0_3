@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__),'../../lib/setup')
 
 @max_v, @min_v = 4.0 , -4.0
 @n_particles = 20
-@n_iterations = 200
+@n_iterations = 2
 @factor = 0.3
 @nrp = NRP.new :path => @nrp_test_path << 'nrp1.txt', :ratio => @factor
 @pso_name = 'nrp1_0_3'
@@ -42,7 +42,7 @@ require File.join(File.dirname(__FILE__),'../../lib/setup')
     @result_file.puts " nrp1 factor #{@factor}"
     @result_file.puts " pso vmax = #{@max_v}"
     @result_file.puts " best = #{@pso.g_best.value}"
-    PSO.delete_all
+    PSOBinary.where(:name => @pso_name).delete
   }
   @result_file.puts " run time = #{run_time}"
   @result_file.puts "----------------------------------------------------------------"
