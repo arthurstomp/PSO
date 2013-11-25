@@ -47,6 +47,8 @@ average(20,@result_file_path){
     @result_file.puts " best = #{@pso.g_best.value}"
     PSOBinary.where(:name => @pso_name).delete
   }
+  puts " run time = #{run_time}"
+  puts "----------------------------------------------------------------"
   @result_file.puts " run time = #{run_time}"
   @result_file.puts "----------------------------------------------------------------"
 

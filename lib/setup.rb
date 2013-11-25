@@ -1,11 +1,11 @@
-require "/Users/Stomp/Development/Ruby/nrp/nrp"
+require File.join(File.dirname(__FILE__),'../../nrp/nrp')
 require 'mongoid'
 require File.join(File.dirname(__FILE__), 'pso')
 require File.join(File.dirname(__FILE__), 'pso_binary')
 #require File.join(File.dirname(__FILE__), 'pso_binary_type1')
 require File.join(File.dirname(__FILE__), 'pso_type1')
 
-Mongoid.load!('/Users/Stomp/Development/Ruby/pso/lib/mongoid.yml', :test)
+Mongoid.load!(File.join(File.dirname(__FILE__),'mongoid.yml'), :test)
 
 @max_v = 4.0
 @min_v = -4.0
@@ -14,7 +14,7 @@ Mongoid.load!('/Users/Stomp/Development/Ruby/pso/lib/mongoid.yml', :test)
 
 @n_iterations = 200
 
-@nrp_test_path = "/Users/Stomp/Development/Ruby/nrp/nrp-tests/"
+@nrp_test_path = File.join(File.dirname(__FILE__),'../../nrp/nrp-tests')+"/"
 
 def time
   start_time = Time.now
