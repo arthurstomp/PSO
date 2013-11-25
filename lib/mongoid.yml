@@ -1,0 +1,6 @@
+test:
+  sessions:
+    default:
+      database: nrp 
+      hosts: 
+        - localhost:27017

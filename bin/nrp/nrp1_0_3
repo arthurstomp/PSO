@@ -2,30 +2,53 @@
 require File.join(File.dirname(__FILE__),'../../lib/setup')
 
 @max_v, @min_v = 4.0 , -4.0
-@n_particles = 200
-@n_iterations = 200
-
+@n_particles = 20
+@n_iterations = 2
 @factor = 0.3
-
 @nrp = NRP.new :path => @nrp_test_path << 'nrp1.txt', :ratio => @factor
-PSO.max_velocity = @max_v
-PSO.min_velocity = @min_v
+@pso_name = 'nrp1_0_3'
 
-average(20){
+20.times{
   run_time = time {
-    @pso = PSO_Binary.new(@n_particles,@nrp.customers.size,@nrp.method(:fitness))
-
-    @n_iterations.times do 
+    attrs = {:n_particles => @n_particles,
+            :n_dimensions => @nrp.customers.size,
+            :max_velocity => @max_v,
+            :min_velocity => @min_v,
+            :name => @pso_name,
+            :iteration => 0
+            }
+    options = {:fitness => @nrp.method(:fitness)}
+    n_iterations_left = @n_iterations 
+    if PSOBinary.where(:name => @pso_name).count != 0
+      @pso = PSOBinary.find_by(name: @pso_name)
+      @pso.fitness = @nrp.method(:fitness)
+      n_iterations_left -= @pso[:iteration]
+    else
+      @pso = PSOBinary.create!(attrs, options)
+    end
+    n_iterations_left.times do |i|
       @pso.explore!
     end
+
 
     puts "----------------------------------------------------------------"
     puts " nrp1 factor #{@factor}"
     puts " pso vmax = #{@max_v}"
     puts " best = #{@pso.g_best.value}"
+    puts "----------------------------------------------------------------"
+
+    @result_file = File.open("#{@pso_name}.txt",'a')
+
+    @result_file.puts "----------------------------------------------------------------"
+    @result_file.puts " nrp1 factor #{@factor}"
+    @result_file.puts " pso vmax = #{@max_v}"
+    @result_file.puts " best = #{@pso.g_best.value}"
+    PSOBinary.where(:name => @pso_name).delete
   }
-  puts " run time = #{run_time}"
-  puts "----------------------------------------------------------------"
+  @result_file.puts " run time = #{run_time}"
+  @result_file.puts "----------------------------------------------------------------"
+
+  @result_file.close
 
   @pso.g_best.value
 }

@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__),'pso')
 
-class PSO_Binary < PSO
+class PSOBinary < PSO
   def s_function(velocity_i)
       1/(1+Math.exp(-velocity_i))
   end
@@ -25,18 +25,18 @@ class PSO_Binary < PSO
   def evaluate_particles
     self.particles.each do |particle|
       fitness_value = self.fitness.call(particle.position)
-      best = Best.new(fitness_value,particle.position.clone)
+      best = Best.new(:value => fitness_value,:position => particle.position.clone)
       if particle.best.nil? 
-        particle.best = best
+        particle.best = best.clone
       end
       if best.value >= particle.best.value
-        particle.best = best
+        particle.best = best.clone
       end
       if self.g_best.nil?
-        self.g_best = best
+        self.g_best = best.clone
       end
       if best.value >= self.g_best.value 
-        self.g_best = best
+        self.g_best = best.clone
       end
     end
   end
