@@ -5,7 +5,8 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 
 # Ignore executable file of nrp, except for the template
-!bin/nrp
+/bin/nrp/*
+!/bin/nrp/template
 
 # Ignore bundler config
 /.bundle
