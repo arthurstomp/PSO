@@ -6,7 +6,7 @@ require File.join(File.dirname(__FILE__),'../../lib/setup')
 @n_iterations = 2
 @factor = 0.5
 @nrp_name = "article_example"
-@nrp = NRP.new :path => @nrp_test_path << 'article_example.txt', :ratio => @factor
+@nrp = NRP.new :path => @nrp_test_path << "#{@nrp_name}.txt", :ratio => @factor
 @pso_name = @nrp_name+"_"+@factor.to_s.gsub(".","_")
 @result_file_path = "#{@pso_name}.txt"
 
