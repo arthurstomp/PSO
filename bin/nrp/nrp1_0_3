@@ -7,7 +7,6 @@ require File.join(File.dirname(__FILE__),'../../lib/setup')
 @factor = 0.3
 @nrp = NRP.new :path => @nrp_test_path << 'nrp1.txt', :ratio => @factor
 @pso_name = 'nrp1_0_3'
-@result_file = File.open("#{@pso_name}.txt",'a')
 
 20.times{
   run_time = time {
@@ -38,6 +37,8 @@ require File.join(File.dirname(__FILE__),'../../lib/setup')
     puts " best = #{@pso.g_best.value}"
     puts "----------------------------------------------------------------"
 
+    @result_file = File.open("#{@pso_name}.txt",'a')
+
     @result_file.puts "----------------------------------------------------------------"
     @result_file.puts " nrp1 factor #{@factor}"
     @result_file.puts " pso vmax = #{@max_v}"
@@ -46,6 +47,8 @@ require File.join(File.dirname(__FILE__),'../../lib/setup')
   }
   @result_file.puts " run time = #{run_time}"
   @result_file.puts "----------------------------------------------------------------"
+
+  @result_file.close
 
   @pso.g_best.value
 }
