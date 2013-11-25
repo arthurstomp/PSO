@@ -23,7 +23,13 @@ def time
   end_time - start_time
 end
 
-def average(n_runs,result_file)
+class Array
+  def average
+    self.inject{|sum,el| sum + el}.to_f / self.size
+  end
+end
+
+def average(n_runs,result_file_path)
   bests = Array.new(0)
 
   n_runs.times do |i|
@@ -32,7 +38,13 @@ def average(n_runs,result_file)
 
   puts "best = #{bests.max}"
   puts "bests = #{bests.to_s}"
+  puts "bests average = #{bests.average}"
 
-  result_file.puts "best = #{bests.max}"
-  result_file.puts "bests = #{bests.to_s}"
+  if @result_file.nil? or @result_file.closed?
+    @result_file = File.open(result_file_path,"a")
+  end
+
+  @result_file.puts "best = #{bests.max}"
+  @result_file.puts "bests = #{bests.to_s}"
+  @result_file.puts "bests average = #{bests.average}"
 end

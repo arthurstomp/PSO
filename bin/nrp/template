@@ -8,8 +8,9 @@ require File.join(File.dirname(__FILE__),'../../lib/setup')
 @nrp_name = "article_example"
 @nrp = NRP.new :path => @nrp_test_path << 'article_example.txt', :ratio => @factor
 @pso_name = @nrp_name+"_"+@factor.to_s.gsub(".","_")
+@result_file_path = "#{@pso_name}.txt"
 
-20.times{
+average(20,@result_file_path){
   run_time = time {
     attrs = {:n_particles => @n_particles,
             :n_dimensions => @nrp.customers.size,
@@ -38,7 +39,7 @@ require File.join(File.dirname(__FILE__),'../../lib/setup')
     puts " best = #{@pso.g_best.value}"
     puts "----------------------------------------------------------------"
 
-    @result_file = File.open("#{@pso_name}.txt",'a')
+    @result_file = File.open(@result_file_path,'a')
 
     @result_file.puts "----------------------------------------------------------------"
     @result_file.puts " #{@pso_name}"
