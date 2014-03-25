@@ -1,0 +1,58 @@
+#!/Users/Stomp/.rvm/rubies/ruby-2.0.0-p195/bin/ruby
+require File.join(File.dirname(__FILE__),'../../lib/setup')
+
+@max_v, @min_v = 7.0 , -7.0
+@n_particles = 200
+@n_iterations = 1000
+@factor = 0.5
+@nrp_name = "nrp2"
+@nrp = NRP.new :path => @nrp_test_path << "#{@nrp_name}.txt", :ratio => @factor
+@pso_name = @nrp_name+"_"+@factor.to_s.gsub(".","_")
+@result_file_path = "#{@pso_name}.txt"
+
+average(20,@result_file_path){
+  run_time = time {
+    attrs = {:n_particles => @n_particles,
+            :n_dimensions => @nrp.customers.size,
+            :max_velocity => @max_v,
+            :min_velocity => @min_v,
+            :name => @pso_name,
+            :iteration => 0
+            }
+    options = {:fitness => @nrp.method(:fitness)}
+    n_iterations_left = @n_iterations 
+    if PSOBinary.where(:name => @pso_name).count != 0
+      @pso = PSOBinary.find_by(name: @pso_name)
+      @pso.fitness = @nrp.method(:fitness)
+      n_iterations_left -= @pso[:iteration]
+    else
+      @pso = PSOBinary.create!(attrs, options)
+    end
+    n_iterations_left.times do |i|
+      @pso.explore!
+    end
+
+
+    puts "----------------------------------------------------------------"
+    puts " #{@pso_name}"
+    puts " pso vmax = #{@max_v}"
+    puts " best = #{@pso.g_best.value}"
+    puts "----------------------------------------------------------------"
+
+    @result_file = File.open(@result_file_path,'a')
+
+    @result_file.puts "----------------------------------------------------------------"
+    @result_file.puts " #{@pso_name}"
+    @result_file.puts " pso vmax = #{@max_v}"
+    @result_file.puts " best = #{@pso.g_best.value}"
+    PSOBinary.where(:name => @pso_name).delete
+  }
+  puts " run time = #{run_time}"
+  puts "----------------------------------------------------------------"
+  @result_file.puts " run time = #{run_time}"
+  @result_file.puts "----------------------------------------------------------------"
+
+  @result_file.close
+
+  @pso.g_best.value
+}
